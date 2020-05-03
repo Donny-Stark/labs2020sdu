@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.sdu.ise.labs.dao.CompetitionEventMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.ise.labs.model.CompetitionEvent" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="tenant_code" property="tenantCode" jdbcType="VARCHAR" />
+    <result column="competition_event_code" property="competitionEventCode" jdbcType="VARCHAR" />
+    <result column="competition_event_name" property="competitionEventName" jdbcType="VARCHAR" />
+    <result column="suite_type" property="suiteType" jdbcType="INTEGER" />
+    <result column="plan_start_at" property="planStartAt" jdbcType="DATE" />
+    <result column="plan_end_at" property="planEndAt" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, tenant_code, competition_event_code, competition_event_name, suite_type, plan_start_at, 
+    plan_end_at, status, created_at, updated_at, created_by, updated_by
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from competition_event
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from competition_event
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent" >
+    insert into competition_event (id, tenant_code, competition_event_code, 
+      competition_event_name, suite_type, plan_start_at, 
+      plan_end_at, status, created_at, 
+      updated_at, created_by, updated_by
+      )
+    values (#{id,jdbcType=INTEGER}, #{tenantCode,jdbcType=VARCHAR}, #{competitionEventCode,jdbcType=VARCHAR}, 
+      #{competitionEventName,jdbcType=VARCHAR}, #{suiteType,jdbcType=INTEGER}, #{planStartAt,jdbcType=DATE}, 
+      #{planEndAt,jdbcType=DATE}, #{status,jdbcType=INTEGER}, #{createdAt,jdbcType=TIMESTAMP}, 
+      #{updatedAt,jdbcType=TIMESTAMP}, #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent" >
+    insert into competition_event
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="tenantCode != null" >
+        tenant_code,
+      </if>
+      <if test="competitionEventCode != null" >
+        competition_event_code,
+      </if>
+      <if test="competitionEventName != null" >
+        competition_event_name,
+      </if>
+      <if test="suiteType != null" >
+        suite_type,
+      </if>
+      <if test="planStartAt != null" >
+        plan_start_at,
+      </if>
+      <if test="planEndAt != null" >
+        plan_end_at,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createdAt != null" >
+        created_at,
+      </if>
+      <if test="updatedAt != null" >
+        updated_at,
+      </if>
+      <if test="createdBy != null" >
+        created_by,
+      </if>
+      <if test="updatedBy != null" >
+        updated_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tenantCode != null" >
+        #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="competitionEventCode != null" >
+        #{competitionEventCode,jdbcType=VARCHAR},
+      </if>
+      <if test="competitionEventName != null" >
+        #{competitionEventName,jdbcType=VARCHAR},
+      </if>
+      <if test="suiteType != null" >
+        #{suiteType,jdbcType=INTEGER},
+      </if>
+      <if test="planStartAt != null" >
+        #{planStartAt,jdbcType=DATE},
+      </if>
+      <if test="planEndAt != null" >
+        #{planEndAt,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent" >
+    update competition_event
+    <set >
+      <if test="tenantCode != null" >
+        tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      </if>
+      <if test="competitionEventCode != null" >
+        competition_event_code = #{competitionEventCode,jdbcType=VARCHAR},
+      </if>
+      <if test="competitionEventName != null" >
+        competition_event_name = #{competitionEventName,jdbcType=VARCHAR},
+      </if>
+      <if test="suiteType != null" >
+        suite_type = #{suiteType,jdbcType=INTEGER},
+      </if>
+      <if test="planStartAt != null" >
+        plan_start_at = #{planStartAt,jdbcType=DATE},
+      </if>
+      <if test="planEndAt != null" >
+        plan_end_at = #{planEndAt,jdbcType=DATE},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.ise.labs.model.CompetitionEvent" >
+    update competition_event
+    set tenant_code = #{tenantCode,jdbcType=VARCHAR},
+      competition_event_code = #{competitionEventCode,jdbcType=VARCHAR},
+      competition_event_name = #{competitionEventName,jdbcType=VARCHAR},
+      suite_type = #{suiteType,jdbcType=INTEGER},
+      plan_start_at = #{planStartAt,jdbcType=DATE},
+      plan_end_at = #{planEndAt,jdbcType=DATE},
+      status = #{status,jdbcType=INTEGER},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.edu.sdu.ise.labs.dao.RangeMapper" >
+  <resultMap id="BaseResultMap" type="cn.edu.sdu.ise.labs.model.Range" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="range_code" property="rangeCode" jdbcType="VARCHAR" />
+    <result column="range_name" property="rangeName" jdbcType="VARCHAR" />
+    <result column="range_location" property="rangeLocation" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="close_reason" property="closeReason" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="created_at" property="createdAt" jdbcType="TIMESTAMP" />
+    <result column="updated_at" property="updatedAt" jdbcType="TIMESTAMP" />
+    <result column="created_by" property="createdBy" jdbcType="VARCHAR" />
+    <result column="updated_by" property="updatedBy" jdbcType="VARCHAR" />
+    <result column="tenant_code" property="tenantCode" jdbcType="VARCHAR"/>
+    <result column="deleted" property="deleted" jdbcType="TINYINT"/>
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, range_code, range_name, range_location, status, close_reason, description, created_at, 
+    updated_at, created_by, updated_by, tenant_code,deleted
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from `range`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from `range`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.sdu.ise.labs.model.Range" >
+    insert into `range` (id, range_code, range_name,
+      range_location, status, close_reason,
+      description, created_by, updated_by,
+      tenant_code)
+    values (#{id,jdbcType=INTEGER}, #{rangeCode,jdbcType=VARCHAR}, #{rangeName,jdbcType=VARCHAR}, 
+      #{rangeLocation,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{closeReason,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR},  #{createdBy,jdbcType=VARCHAR}, #{updatedBy,jdbcType=VARCHAR},
+      #{tenantCode,jdbcType=VARCHAR})
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.sdu.ise.labs.model.Range" >
+    update `range`
+    <set >
+      <if test="rangeCode != null" >
+        range_code = #{rangeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeName != null" >
+        range_name = #{rangeName,jdbcType=VARCHAR},
+      </if>
+      <if test="rangeLocation != null" >
+        range_location = #{rangeLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="closeReason != null" >
+        close_reason = #{closeReason,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createdAt != null" >
+        created_at = #{createdAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedAt != null" >
+        updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null" >
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedBy != null" >
+        updated_by = #{updatedBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.sdu.ise.labs.model.Range" >
+    update `range`
+    set range_code = #{rangeCode,jdbcType=VARCHAR},
+      range_name = #{rangeName,jdbcType=VARCHAR},
+      range_location = #{rangeLocation,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      close_reason = #{closeReason,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      created_at = #{createdAt,jdbcType=TIMESTAMP},
+      updated_at = #{updatedAt,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      updated_by = #{updatedBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+
+  <!-- 获取名字个数(分页) -->
+  <select id="count" resultType="integer">
+    select count(*)
+    from `range`
+    <where>
+      <if test="queryDTO.rangeName != null">
+        range_name like #{queryDTO.rangeName}
+      </if>
+      and tenant_code = #{tenantCode}
+      and deleted = 0
+    </where>
+  </select>
+
+  <!-- 批量删除 -->
+  <update id="deleteByCodes">
+    update `range`
+    set deleted = 1, updated_by=#{teacherCode}
+    where range_code in
+    <foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+
+  <!-- 获取部门(分页) -->
+  <select id="list" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `range`
+    <where>
+      <if test="queryDTO.rangeName != null ">
+        range_name like #{queryDTO.rangeName}
+      </if>
+      <if test="queryDTO.rangeLocation != null ">
+        and range_location like #{queryDTO.rangeLocation}
+      </if>
+      and tenant_code = #{tenantCode}
+      and deleted = 0
+    </where>
+    limit #{offset}, #{limit}
+  </select>
+
+  <!-- 根据代码列表获取场地列表 -->
+  <select id="listByCodes" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `range`
+    where range_code in
+    <foreach item="item" index="index" collection="codeList" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    and tenant_code = #{tenantCode}
+    and deleted = 0
+  </select>
+
+  <!-- 根据代码名称获取场地列表 -->
+  <select id="listByCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `range`
+    where
+    <if test="rangeCode!=null">
+      range_code like #{rangeCode}
+    </if>
+    and tenant_code = #{tenantCode}
+    and deleted = 0
+  </select>
+
+  <!-- 获取部门列表(分页) -->
+  <select id="getByCode" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `range`
+    where
+    range_code=#{rangeCode}
+    and tenant_code = #{tenantCode}
+    and deleted = 0
+  </select>
+
+  <!-- 获取名字 -->
+  <select id="getByName" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from `range`
+    where
+    range_name=#{rangeName}
+    and tenant_code = #{tenantCode}
+    and deleted = 0
+  </select>
+
+</mapper>
